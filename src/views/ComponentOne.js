@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as IndexActions from "../redux/actions/index";
+import { DatePicker } from "antd";
 
 class ComponentOne extends Component {
   state = {
@@ -28,6 +29,7 @@ class ComponentOne extends Component {
       <div>
         {rights}
         <h3 onClick={() => this.change()}>标题组件1</h3>
+        <DatePicker />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDom from "react-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import 'antd/dist/reset.css';
 import ComponentOne from "./views/ComponentOne";
 import ComponentTwo from "./views/ComponentTwo";
 import configStore from "./redux/configStore";
