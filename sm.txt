@@ -1,0 +1,255 @@
+
+1,
+npm init
+2,
+npm install webpack webpack-cli --save-dev
+3,
+const path = require('path')
+
+module.exports = {
+    mode: 'development',
+    entry: './src/index.js',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, '../dist')
+    }
+}
+4,
+"scripts": {
+    "build": "webpack --config ./build/webpack.config.js"
+  },
+
+5,核心配置
+
+安装babel-loader及插件
+npm install babel-loader @babel/core @babel/preset-env @babel/preset-react --save-dev
+
+配置babel.config.js
+
+module.exports = {
+    presets: [
+        [
+            // babel预设
+            '@babel/preset-env',
+            {
+                // 使用corejs 3的版本
+                corejs: 2,
+                // 按需加载
+                useBuiltIns: 'entry',
+                // 不使用模块化  交给其它打包工具处理
+                modules: false
+            }
+        ]
+    ],
+    plugins: []
+};
+
+配置webpack.config.js
+
+module: {
+        rules: [
+            {
+                test: /\.js|jsx$/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options:{
+                            presets:['@babel/preset-env']
+                        }
+                    }
+                ],
+                include: path.join(__dirname, '../src'),
+                exclude:/node_modules/
+            }
+        ]
+}
+
+安装@babel/polyfill
+
+这是因为我们的babel-loader只能转换高级语法，并不会转换新的API，所以这时候我们就需要用@babel/polyfill来为当前环境提供一个垫片；还有第二个问题是，当我们执行打包后，打包的文件里会有大量的重复代码，那我们这时候就需要提供统一的模块化的helper来减少这些helper函数的重复输出。所以就需要我们安装以下插件模块
+
+
+安装babel/polyfill的插件
+
+npm install @babel/runtime @babel/plugin-transform-runtime @babel/plugin-syntax-dynamic-import --save-dev
+
+// babel.config.js文件中如下修改：
+module.exports = {
+    presets: [
+        [
+            // babel预设
+            '@babel/preset-env',
+            {
+                // 使用corejs 3的版本
+                corejs: 2,
+                // 按需加载
+                useBuiltIns: 'entry',
+                // 不使用模块化  交给其它打包工具处理
+                modules: false
+            }
+        ]
+    ],
+    plugins: [
+        ["@babel/plugin-transform-runtime"],//就是在此处添加了两个@babel/runtime中的插件
+        "@babel/plugin-syntax-dynamic-import"
+    ]
+};
+
+//webpack.config.js文件中如下修改：
+{
+    test: /\.js|jsx$/,
+    use: [
+        {
+            loader: 'babel-loader',
+            options:{
+                presets:['@babel/preset-env','@babel/preset-react']
+            }
+        }
+    ],
+    include: path.join(__dirname, '../src'),
+    exclude:/node_modules/
+}
+
+6,
+less/sass等css预处理器代码转换为css
+npm install stylus stylus-loader less less-loader sass-loader node-sass css-loader style-loader --save-dev
+
+{
+   test: /\.less$/,
+   use: [
+       {
+           loader: 'style-loader'
+       }, {
+           loader: 'css-loader'
+       }, {
+           loader: 'less-loader'
+       }
+   ]
+}
+如果我们使用CSS3的一些新特性时，需要为不同的浏览器在CSS代码中添加不同的前缀，在开发中手动添加太麻烦，所以我们可以通过postcss来自动添加各种浏览器前缀。首先我们先要安装以下依赖插件：
+安装postcss依赖
+npm install postcss-loader autoprefixer --save-dev
+修改配置
+{
+    test: /\.less$/,
+    use: [
+        {
+            loader: 'style-loader'
+        }, {
+            loader: 'css-loader'
+        }, {
+            loader: 'postcss-loader'
+        }, {
+            loader: 'less-loader'
+        }
+    ]
+}
+
+7，解析字体、图片等静态资源
+
+npm install file-loader url-loader --save-dev
+
+file-loader可以用来帮助webpack打包处理一系列的图片文件，比如：.png 、 .jpg 、.jepg等格式的图片。打包的图片会给每张图片都生成一个随机的hash值作为图片的名字；url-loader封装了file-loader，它的工作原理：1、文件大小小于limit参数，url-loader将会把文件转为Base64；2、文件大小大于limit，url-loader会调用file-loader进行处理，参数也会直接传给file-loader。
+
+{ //配置图片静态资源的打包信息
+   test: /\.(jpg|png|jpeg|gif)$/,
+   use: [
+       {
+           loader: 'url-loader',
+           options: {
+               limit: 1024,
+               fallback: {
+                   loader: 'file-loader',
+                   options: {
+                       name: 'img/[name].[hash:8].[ext]'
+                   }
+               }
+           }
+       }
+   ]
+}, { //配置多媒体资源的打包信息
+   test: /\.(mp4|webm|ogg|mp3|wav)$/,
+   use: [
+       {
+           loader: 'url-loader',
+           options: {
+               limit: 1024,
+               fallback: {
+                   loader: 'file-loader',
+                   options: {
+                       name: 'media/[name].[hash:8].[ext]'
+                   }
+               }
+           }
+       }
+   ]
+}
+
+8,压缩打包后的JS、CSS文件
+npm install mini-css-extract-plugin --save-dev
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+
+plugins: [
+    new MiniCssExtractPlugin({
+      // 瘦身css
+      filename: "[name].[contenthash].css",
+      chunkFilename: "[id].[contenthash].css",
+    }),
+  ],
+
+
+   {
+        //最后添加这个依赖插件的配置信息
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: "../",
+            },
+          },
+          "css-loader",
+        ],
+      },
+
+9,抽离公共代码
+所以抽离公共代码这件事情是由SplitChunksPlugin插件来做
+
+optimization: {  //添加抽离公共代码插件的配置
+        splitChunks: {
+            cacheGroups: {
+                //打包公共模块
+                commons: {
+                    chunks: 'initial', //initial表示提取入口文件的公共部分
+                    minChunks: 2, //表示提取公共部分最少的文件数
+                    minSize: 0, //表示提取公共部分最小的大小
+                    name: 'commons' //提取出来的文件命名
+                }
+            }
+        },
+    }
+
+10 添加resolve选项
+
+resolve: {                                    //resolve核心配置
+        extensions: ['.js', '.jsx', '.json'],
+        alias: {
+            pages: path.join(__dirname, '../src/pages'),
+            components: path.join(__dirname, '../src/components'),
+            actions: path.join(__dirname, '../src/redux/actions'),
+            reducers: path.join(__dirname, '../src/redux/reducers'),
+            images: path.join(__dirname, '../src/images')
+        }
+    }
+
+11,代码热更新
+
+npm install webpack-dev-server --save-dev
+npm install html-webpack-plugin --save-dev
+
+12,删除上一次的打包结果及记录
+
+npm install clean-webpack-plugin --save-dev
+

@@ -1,0 +1,36 @@
+{
+  "name": "react-apps",
+  "version": "1.0.0",
+  "description": "react-apps init demo!",
+  "main": "index.js",
+  "repository": "https://github.com/KaiChow/react-apps.git",
+  "author": "KevinZhou <1065438834@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dev-server --config ./build/webpack.config.js",
+    "build": "webpack --config ./build/webpack.config.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/runtime": "^7.21.0",
+    "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.7.3",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "less": "^4.1.3",
+    "less-loader": "^11.1.0",
+    "mini-css-extract-plugin": "^2.7.3",
+    "postcss-loader": "^7.0.2",
+    "style-loader": "^3.3.2",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.12.0"
+  }
+}
