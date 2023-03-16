@@ -10,6 +10,11 @@
     "dev": "webpack-dev-server --config ./build/webpack.config.js",
     "build": "webpack --config ./build/webpack.config.js"
   },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",

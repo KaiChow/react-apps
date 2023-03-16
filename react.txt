@@ -1,0 +1,7 @@
+集成react
+
+1 npm install react react-dom --save-dev
+
+2,集成react-router  
+
+npm install react-router-dom --save-dev
