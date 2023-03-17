@@ -6,14 +6,14 @@ import {
 } from "redux";
 import { routerReducer } from "react-router-redux";
 import thunk from "redux-thunk";
-import rightsActions from "./store/rights";
+import productReducer from "./store/products";
 
 const finalCreateStore = compose(applyMiddleware(thunk))(createStore);
 
 const reducer = combineReducers(
   Object.assign(
     {},
-    { rightsActions },
+    { products: productReducer },
     {
       routing: routerReducer,
     }

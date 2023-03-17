@@ -1,8 +1,7 @@
-export const FUNC_RIGHTS = "func_rights";
-
-export function funcRights(rights) {
+export const ADD_CART = "add_cart";
+export function addCart(list) {
   return {
-    type: FUNC_RIGHTS,
-    payload: rights,
+    type: ADD_CART,
+    payload: list,
   };
 }

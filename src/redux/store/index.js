@@ -1,10 +1,9 @@
 import { combineReducers } from "redux";
-import rightsReducer from "./rights";
+import productReducer from "./products";
 
 const rootReducer = combineReducers({
-  rightsReducer,
+  productReducer,
 });
 
 export default rootReducer;
 
-export * as rightsActions from "../actions/index";
