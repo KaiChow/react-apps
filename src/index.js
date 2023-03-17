@@ -1,16 +1,16 @@
 import React from "react";
-import ReactDom from "react-dom";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import 'antd/dist/reset.css';
-import ComponentOne from "./views/ComponentOne";
-import ComponentTwo from "./views/ComponentTwo";
+import "antd/dist/reset.css";
 import configStore from "./redux/configStore";
 import { Provider } from "react-redux";
+import Products from "./views/Products";
 
 const store = configStore();
-const routerDom = () => (
+const App = () => (
   <Provider store={store}>
-    <Router>
+    <Products />
+    {/* <Router>
       <div className="primary-layout">
         <header>
           <Link to="/">组件一</Link>
@@ -24,7 +24,9 @@ const routerDom = () => (
           </Routes>
         </main>
       </div>
-    </Router>
+    </Router> */}
   </Provider>
 );
-ReactDom.render(routerDom(), document.getElementById("root"));
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
