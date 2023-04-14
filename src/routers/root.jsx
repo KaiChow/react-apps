@@ -1,6 +1,6 @@
 import { Card, List, Layout } from "antd";
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 const { Header, Footer, Sider, Content } = Layout;
 
 const headerStyle = {
@@ -9,7 +9,9 @@ const headerStyle = {
   height: 64,
   paddingInline: 50,
   lineHeight: "64px",
-  backgroundColor: "#7dbcea",
+  border: "1px solid #7dbcea ",
+  backgroundColor: "#fff",
+  boxSizing: "border-box",
 };
 
 const contentStyle = {
@@ -17,31 +19,76 @@ const contentStyle = {
   minHeight: 120,
   lineHeight: "120px",
   color: "#fff",
-  backgroundColor: "#108ee9",
+  border: "1px solid #108ee9 ",
+  backgroundColor: "#fff",
+  boxSizing: "border-box",
 };
 
 const siderStyle = {
+  width: "200px",
   textAlign: "center",
   lineHeight: "120px",
   color: "#fff",
-  backgroundColor: "#3ba0e9",
+  border: "1px solid #3ba0e9 ",
+  backgroundColor: "#fff",
+  marginRight: "2px",
+  boxSizing: "border-box",
 };
 
 const footerStyle = {
   textAlign: "center",
   color: "#fff",
-  backgroundColor: "#7dbcea",
+  backgroundColor: "#fff",
+  border: "1px solid #7dbcea ",
+  boxSizing: "border-box",
+};
+// 子组件
+const Items = ({ name, path, selectKey, onClick }) => {
+  return (
+    <div
+      className={selectKey === path ? "active-link menu-item" : "menu-item"}
+      onClick={onClick}
+    >
+      <span>{name}</span>
+    </div>
+  );
 };
 export default function Root() {
-  const data = ["dashboard", "products", "comments"];
+  const data = [
+    {
+      name: "工作台",
+      path: "dashboard",
+    },
+    {
+      name: "购物车",
+      path: "products",
+    },
+    {
+      name: "留言板",
+      path: "comments",
+    },
+  ];
+  const [selectKey, setSelectKey] = useState("");
+  const navigate = useNavigate();
+  const handleClick = (item) => {
+    setSelectKey(item.path);
+    navigate(`/${item.path}`);
+  };
   return (
-    <Layout>
+    <Layout style={{ height: "100%" }}>
       <Sider style={siderStyle}>
         <List
-          size="small"
-          bordered
           dataSource={data}
-          renderItem={(item) => <List.Item>{item}</List.Item>}
+          renderItem={(item) => (
+            <List.Item>
+              <Items
+                name={item.name}
+                path={item.path}
+                selectKey={selectKey}
+                onClick={() => handleClick(item)}
+              />
+            </List.Item>
+          )}
         />
       </Sider>
       <Layout>

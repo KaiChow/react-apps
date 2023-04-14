@@ -5,6 +5,8 @@ import configStore from "./redux/configStore";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import router from "./routers/index";
+import "./index.css";
+import "./index.less";
 
 const store = configStore();
 const App = () => (
