@@ -1,5 +1,5 @@
 import { Button, Card, List } from "antd";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect, useDispatch } from "react-redux";
 import { addCart } from "../redux/actions";
 
